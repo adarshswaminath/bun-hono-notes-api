@@ -5,7 +5,6 @@ export const createNote = async (title: string, content: string) => {
     const getAllNotes = await Note.create({ title, content });
     return getAllNotes;
    } catch (error) {
-    console.log(error);
     throw new Error("Something went wrong");
     
    }
