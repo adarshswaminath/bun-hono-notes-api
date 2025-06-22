@@ -5,7 +5,6 @@ export async function updateNote(c: Context) {
     try {
         const { id } = c.req.param();
         const { title, content } = await c.req.json();
-        console.log("API HIT", title, content);
         const note = await Note.findByPk(id);
         await note?.update({ title, content });
         return c.json({
@@ -14,7 +13,6 @@ export async function updateNote(c: Context) {
             "data": note
         });
     } catch (error) {
-        console.log("error", error);
         return c.json({ error: "Something went wrong" }, { status: 500 });
     }
 }
