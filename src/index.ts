@@ -1,24 +1,26 @@
-import { serve } from '@hono/node-server'
-import { Hono } from 'hono'
-import { WriteNote } from './controller/write-note.js'
-import { sequelizeInstance } from './config/db.js'
-import { GetNoteById } from './controller/get-note-by-id.js'
-import { GetAllNotes } from './controller/get-all-notes.js'
-import { Note } from './models/Notes.model.js'
-import { deleteNote } from './controller/delete-note.js'
-import { updateNote } from './controller/update-note.js'
+import { serve } from "@hono/node-server";
+import { Hono } from "hono";
+import { handleCreateNote } from "./controller/handle-create-note.js";
+import { sequelizeInstance } from "./config/db.js";
+import { handleNoteById } from "./controller/handle-note-by-id.js";
+import { handleAllNotes } from "./controller/handle-all-notes.js";
+import { handleDeleteNote } from "./controller/handle-delete-note.js";
+import { handleUpdateNote } from "./controller/handle-update-note.js";
 
-const app = new Hono()
-await sequelizeInstance.sync({alter: true}).then(() => console.log("Database synced"))
-app.get("/notes", (c) => GetAllNotes(c))
-app.get("/notes/:id",(c) => GetNoteById(c))
-app.post('/notes', (c) => WriteNote(c))
-app.delete("/notes/:id", (c) => deleteNote(c));
-app.put("/note/:id", (c) => updateNote(c))
+const app = new Hono();
+await sequelizeInstance.sync().then(() => console.log("Database synced"));
+app.get("/notes", (c) => handleAllNotes(c));
+app.get("/note/:id", (c) => handleNoteById(c));
+app.post("/note", (c) => handleCreateNote(c));
+app.delete("/note/:id", (c) => handleDeleteNote(c));
+app.put("/note/:id", (c) => handleUpdateNote(c));
 
-serve({
-  fetch: app.fetch,
-  port: 3000
-}, (info) => {
-  console.log(`Server is running on http://localhost:${info.port}`)
-})
+serve(
+  {
+    fetch: app.fetch,
+    port: 3000,
+  },
+  (info) => {
+    console.log(`Server is running on http://localhost:${info.port}`);
+  }
+);

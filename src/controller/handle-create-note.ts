@@ -1,11 +1,11 @@
 import type { Context } from "hono";
 import { Note } from "../models/Notes.model.js";
+import { createNote } from "../service/create-note.js";
 
-export const WriteNote = async (c: Context) => {
+export const handleCreateNote = async (c: Context) => {
   try {
     const { title, content } = await c.req.json();
-    const note = await Note.create({ title:title, content:content });
-    await note.reload()
+    const note = await createNote(title, content);
     return c.json({
       "status": 200,
       "message": "Note created successfully",

@@ -1,10 +1,10 @@
 import type { Context } from "hono";
-import { Note } from "../models/Notes.model.js";
+import { listNoteById } from "../service/list-note-by-id.js";
 
-export const GetNoteById = async (c: Context) => {
+export const handleNoteById = async (c: Context) => {
   try {
     const { id } = c.req.param();
-    const note = await Note.findByPk(id);
+    const note = await listNoteById(Number(id));
     return c.json({
       "status": 200,
       "message": "Note fetched successfully",
