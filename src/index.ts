@@ -8,7 +8,7 @@ import { handleDeleteNote } from "./controller/handle-delete-note.js";
 import { handleUpdateNote } from "./controller/handle-update-note.js";
 
 const app = new Hono();
-await sequelizeInstance.sync().then(() => console.log("Database synced"));
+await sequelizeInstance.sync();
 app.get("/notes", (c) => handleAllNotes(c));
 app.get("/note/:id", (c) => handleNoteById(c));
 app.post("/note", (c) => handleCreateNote(c));
